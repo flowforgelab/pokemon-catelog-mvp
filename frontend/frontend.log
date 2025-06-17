@@ -457,3 +457,34 @@ Compiling...
 Compiled successfully!
 webpack compiled successfully
 No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/components/CardItem.tsx:81:68
+TS2339: Property 'startsWith' does not exist on type 'never'.
+    79 |                   // Handle both array and PostgreSQL string format
+    80 |                   let typesArray = card.types;
+  > 81 |                   if (typeof card.types === 'string' && card.types.startsWith('{')) {
+       |                                                                    ^^^^^^^^^^
+    82 |                     // Convert PostgreSQL array string format "{type1,type2}" to array
+    83 |                     typesArray = card.types.slice(1, -1).split(',').filter(Boolean);
+    84 |                   }
+
+ERROR in src/components/CardItem.tsx:83:45
+TS2339: Property 'slice' does not exist on type 'never'.
+    81 |                   if (typeof card.types === 'string' && card.types.startsWith('{')) {
+    82 |                     // Convert PostgreSQL array string format "{type1,type2}" to array
+  > 83 |                     typesArray = card.types.slice(1, -1).split(',').filter(Boolean);
+       |                                             ^^^^^
+    84 |                   }
+    85 |                   if (!Array.isArray(typesArray)) return null;
+    86 |                   
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.

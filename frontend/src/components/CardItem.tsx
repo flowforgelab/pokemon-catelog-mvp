@@ -73,15 +73,32 @@ const CardItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           <h3 className="font-semibold text-sm truncate">{card.name}</h3>
           <div className="flex items-center justify-between mt-1">
             <span className="text-xs text-gray-600">{card.set.name}</span>
-            {card.types && card.types.length > 0 && (
+            {card.types && (
               <div className="flex gap-1">
-                {card.types.map((type, index) => (
-                  <div 
-                    key={index}
-                    className={`w-5 h-5 rounded-full ${getTypeColor(type)}`}
-                    title={type}
-                  />
-                ))}
+                {(() => {
+                  // Handle both array and PostgreSQL string format
+                  let typesArray: string[] = [];
+                  
+                  if (Array.isArray(card.types)) {
+                    typesArray = card.types;
+                  } else if (typeof card.types === 'string') {
+                    // Convert PostgreSQL array string format "{type1,type2}" to array
+                    const typesStr = card.types as string;
+                    if (typesStr.startsWith('{') && typesStr.endsWith('}')) {
+                      typesArray = typesStr.slice(1, -1).split(',').filter(Boolean);
+                    }
+                  }
+                  
+                  if (typesArray.length === 0) return null;
+                  
+                  return typesArray.map((type, index) => (
+                    <div 
+                      key={index}
+                      className={`w-5 h-5 rounded-full ${getTypeColor(type)}`}
+                      title={type}
+                    />
+                  ));
+                })()}
               </div>
             )}
           </div>

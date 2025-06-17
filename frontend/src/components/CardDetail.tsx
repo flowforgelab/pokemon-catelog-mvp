@@ -62,7 +62,23 @@ const CardDetail: React.FC<CardDetailProps> = ({ card, onClose }) => {
                   <div><span className="font-medium">Number:</span> {card.number}/{card.set.printedTotal}</div>
                   {card.artist && <div><span className="font-medium">Artist:</span> {card.artist}</div>}
                   {card.rarity && <div><span className="font-medium">Rarity:</span> {card.rarity}</div>}
-                  {card.types && <div><span className="font-medium">Type:</span> {card.types.join(', ')}</div>}
+                  {card.types && (
+                    <div>
+                      <span className="font-medium">Type:</span> {
+                        (() => {
+                          if (Array.isArray(card.types)) {
+                            return card.types.join(', ');
+                          } else if (typeof card.types === 'string') {
+                            const typesStr = card.types as string;
+                            if (typesStr.startsWith('{') && typesStr.endsWith('}')) {
+                              return typesStr.slice(1, -1).split(',').join(', ');
+                            }
+                          }
+                          return '';
+                        })()
+                      }
+                    </div>
+                  )}
                   {card.hp && <div><span className="font-medium">HP:</span> {card.hp}</div>}
                   <div>
                     <span className="font-medium">Competitive Rating:</span> {getRatingStars(card.competitiveRating)}
