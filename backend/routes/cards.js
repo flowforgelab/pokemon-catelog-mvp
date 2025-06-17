@@ -175,6 +175,7 @@ router.get('/search', async (req, res) => {
     // Transform cards to match frontend format
     const transformedCards = result.rows.map(card => ({
       ...card,
+      types: card.types || [], // Ensure types is always an array
       images: {
         small: card.image_url,
         large: card.image_url
