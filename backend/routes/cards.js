@@ -2,24 +2,29 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
-// GET all cards with filtering
-router.get('/', async (req, res) => {
+// GET /search endpoint - matches frontend expectations
+router.get('/search', async (req, res) => {
   try {
     const { 
       type, 
-      rarity, 
-      set, 
+      types, // frontend sends as 'types' array
+      rarity,
+      rarities, // frontend sends as 'rarities' array
+      set,
+      sets, // frontend sends as 'sets' array
       search, 
       hp_min,
       hp_max,
       retreat_max,
       competitive_rating,
       has_ability,
-      sort = 'name', 
-      order = 'ASC',
-      limit = 50,
-      offset = 0 
+      sortBy = 'name', // frontend sends as sortBy
+      sortOrder = 'asc', // frontend sends as sortOrder
+      page = 1, // frontend sends page, not offset
+      limit = 50
     } = req.query;
+    
+    const offset = (parseInt(page) - 1) * parseInt(limit);
 
     let query = `
       SELECT DISTINCT c.*, 
@@ -114,14 +119,14 @@ router.get('/', async (req, res) => {
       'newest': 'c.created_at'
     };
     
-    const sortField = sortOptions[sort] || sortOptions['name'];
-    const sortOrder = order.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    const sortField = sortOptions[sortBy] || sortOptions['name'];
+    const sortDirection = sortOrder.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     
     // Special handling for rarity and competitive_rating (already ordered)
-    if (sort === 'rarity' || sort === 'competitive_rating') {
-      query += ` ORDER BY ${sortField} ${sortOrder === 'DESC' ? 'DESC' : 'ASC'}, c.name ASC`;
+    if (sortBy === 'rarity' || sortBy === 'competitive_rating') {
+      query += ` ORDER BY ${sortField} ${sortDirection}, c.name ASC`;
     } else {
-      query += ` ORDER BY ${sortField} ${sortOrder}`;
+      query += ` ORDER BY ${sortField} ${sortDirection}`;
     }
 
     // Add pagination
@@ -167,18 +172,66 @@ router.get('/', async (req, res) => {
     const countResult = await db.query(countQuery, countParams);
     const total = parseInt(countResult.rows[0].count);
 
+    // Transform cards to match frontend format
+    const transformedCards = result.rows.map(card => ({
+      ...card,
+      images: {
+        small: card.image_url,
+        large: card.image_url
+      },
+      set: {
+        id: card.set_id,
+        name: card.set_name,
+        legalities: {
+          standard: card.format_legal ? 'Legal' : 'Not Legal'
+        }
+      },
+      competitiveRating: card.competitive_rating === 'competitive' ? 3 : 
+                         card.competitive_rating === 'playable' ? 2 : 1
+    }));
+    
     res.json({
-      cards: result.rows,
-      pagination: {
-        total,
-        limit: parseInt(limit),
-        offset: parseInt(offset),
-        pages: Math.ceil(total / parseInt(limit))
-      }
+      cards: transformedCards,
+      totalCount: total,
+      page: Math.floor(parseInt(offset) / parseInt(limit)) + 1,
+      pageSize: parseInt(limit)
     });
   } catch (error) {
     console.error('Error fetching cards:', error);
     res.status(500).json({ error: 'Failed to fetch cards' });
+  }
+});
+
+// GET filters endpoint
+router.get('/filters', async (req, res) => {
+  try {
+    // Get types
+    const typesResult = await db.query(`
+      SELECT DISTINCT type FROM card_types ORDER BY type
+    `);
+    const types = typesResult.rows.map(row => 
+      row.type.charAt(0).toUpperCase() + row.type.slice(1)
+    );
+
+    // Get rarities
+    const raritiesResult = await db.query(`
+      SELECT DISTINCT rarity FROM cards WHERE rarity IS NOT NULL ORDER BY rarity
+    `);
+    const rarities = raritiesResult.rows.map(row => row.rarity);
+
+    // Get sets
+    const setsResult = await db.query(`
+      SELECT DISTINCT set_id as id, set_name as name 
+      FROM cards 
+      WHERE format_legal = true
+      ORDER BY set_name
+    `);
+    const sets = setsResult.rows;
+
+    res.json({ types, rarities, sets });
+  } catch (error) {
+    console.error('Error fetching filters:', error);
+    res.status(500).json({ error: 'Failed to fetch filters' });
   }
 });
 
