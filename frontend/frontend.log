@@ -1,0 +1,447 @@
+
+> frontend@0.1.0 start
+> react-scripts start
+
+(node:33915) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33915) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:33915) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view frontend in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.1.219:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/components/AttackCalculator.tsx:90:48
+TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+    88 |     // Check type matchup table
+    89 |     const defendTypeMatchup = typeMatchups[defendType as keyof typeof typeMatchups];
+  > 90 |     return defendTypeMatchup?.resists.includes(attackType) || false;
+       |                                                ^^^^^^^^^^
+    91 |   };
+    92 |
+    93 |   return (
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/components/AttackCalculator.tsx:90:48
+TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+    88 |     // Check type matchup table
+    89 |     const defendTypeMatchup = typeMatchups[defendType as keyof typeof typeMatchups];
+  > 90 |     return defendTypeMatchup?.resists.includes(attackType) || false;
+       |                                                ^^^^^^^^^^
+    91 |   };
+    92 |
+    93 |   return (
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:  'AttackCalculator' is defined but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:  'AttackCalculator' is defined but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+ERROR in src/components/AttackCalculator.tsx:90:48
+TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+    88 |     // Check type matchup table
+    89 |     const defendTypeMatchup = typeMatchups[defendType as keyof typeof typeMatchups];
+  > 90 |     return defendTypeMatchup?.resists.includes(attackType) || false;
+       |                                                ^^^^^^^^^^
+    91 |   };
+    92 |
+    93 |   return (
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:  'AttackCalculator' is defined but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:  'AttackCalculator' is defined but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+ERROR in src/components/AttackCalculator.tsx:90:48
+TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+    88 |     // Check type matchup table
+    89 |     const defendTypeMatchup = typeMatchups[defendType as keyof typeof typeMatchups];
+  > 90 |     return defendTypeMatchup?.resists.includes(attackType) || false;
+       |                                                ^^^^^^^^^^
+    91 |   };
+    92 |
+    93 |   return (
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:  'AttackCalculator' is defined but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:  'AttackCalculator' is defined but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+ERROR in src/components/AttackCalculator.tsx:90:48
+TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+    88 |     // Check type matchup table
+    89 |     const defendTypeMatchup = typeMatchups[defendType as keyof typeof typeMatchups];
+  > 90 |     return defendTypeMatchup?.resists.includes(attackType as any) || false;
+       |                                                ^^^^^^^^^^^^^^^^^
+    91 |   };
+    92 |
+    93 |   return (
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 14:26:  'setShowCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 14:26:  'setShowCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+ERROR in src/components/AttackCalculator.tsx:90:48
+TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+    88 |     // Check type matchup table
+    89 |     const defendTypeMatchup = typeMatchups[defendType as keyof typeof typeMatchups];
+  > 90 |     return defendTypeMatchup?.resists.includes(attackType as any) || false;
+       |                                                ^^^^^^^^^^^^^^^^^
+    91 |   };
+    92 |
+    93 |   return (
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 14:26:  'setShowCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 14:26:  'setShowCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 14:26:  'setShowCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 14:26:  'setShowCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 14:26:  'setShowCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 14:26:  'setShowCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used         @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/CardDetail.tsx
+  Line 4:8:    'AttackCalculator' is defined but never used         @typescript-eslint/no-unused-vars
+  Line 14:10:  'showCalculator' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FilterSidebar.tsx
+  Line 22:10:  'standardOnly' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 22:24:  'setStandardOnly' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FilterSidebar.tsx
+  Line 22:10:  'standardOnly' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 22:24:  'setStandardOnly' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/components/FilterSidebar.tsx:132:21
+TS2345: Argument of type '{ types: string[]; rarities: string[]; sets: string[]; standardOnly: boolean; }' is not assignable to parameter of type '{ types: string[]; rarities: string[]; sets: string[]; }'.
+  Object literal may only specify known properties, and 'standardOnly' does not exist in type '{ types: string[]; rarities: string[]; sets: string[]; }'.
+    130 |                     rarities: selectedRarities,
+    131 |                     sets: selectedSets,
+  > 132 |                     standardOnly: e.target.checked
+        |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    133 |                   });
+    134 |                 }}
+    135 |                 className="mr-2 h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500"
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/CardItem.tsx
+  Line 3:8:  'ImageWithFallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/CardItem.tsx
+  Line 3:8:  'ImageWithFallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/App.tsx
+  Line 4:8:  'ErrorBoundary' is defined but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/App.tsx
+  Line 4:8:  'ErrorBoundary' is defined but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/pages/Home.tsx
+  Line 12:10:  'error' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 12:17:  'setError' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/pages/Home.tsx
+  Line 12:10:  'error' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  Line 12:17:  'setError' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/pages/Home.tsx
+  Line 12:10:  'error' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/pages/Home.tsx
+  Line 12:10:  'error' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+ERROR in src/components/CardDetail.tsx:57:14
+TS2746: This JSX tag's 'children' prop expects a single child of type 'ReactNode', but multiple children were provided.
+    55 |             </div>
+    56 |
+  > 57 |             <div className="space-y-4">
+       |              ^^^
+    58 |               <div>
+    59 |                 <h3 className="font-semibold text-lg mb-2">Card Information</h3>
+    60 |                 <div className="space-y-2 text-sm">
+
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+No issues found.
