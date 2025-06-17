@@ -75,28 +75,33 @@ node test-step1.js         # Test backend functionality
 
 ## Current Status
 
-All 5 MVP steps completed:
+All 6 MVP steps completed:
 1. ✅ Foundation & database setup
 2. ✅ Core backend features (search, filter, competitive ratings)
 3. ✅ Frontend with React/TypeScript/Tailwind
 4. ✅ Strategic features (attack calculator, format badges, error handling)
 5. ✅ Deployment & Launch preparation
+6. ✅ Real data import (250 Pokemon cards from TCG API)
 
-Ready for production deployment to Netlify (frontend) and Railway (backend).
+**Live Production URLs:**
+- Frontend: https://benevolent-mousse-8fe32b.netlify.app
+- Backend: https://pokemon-catelog-mvp-production.up.railway.app/api
+- Database: PostgreSQL on Railway with 250 cards
 
 ## Development Notes
 
-### Mock Data Mode
-Currently using mock data with 3 cards (Charizard ex, Pidgeot ex, Gardevoir ex). To use real database:
-1. Set up PostgreSQL
-2. Run schema.sql
-3. Set `USE_MOCK_DATA=false` in backend/.env
-4. Run import-cards.js
+### Database Mode
+Production is using real PostgreSQL database with 250 Pokemon cards.
+- Mock data mode available by setting `USE_MOCK_DATA=true`
+- Database contains Standard-legal cards with competitive ratings
+- Types stored as JSON arrays using `json_agg` in PostgreSQL
 
-### Common Issues
-- CORS errors: Ensure backend is running on port 3001
-- No cards showing: Check if backend is running and responding
-- TypeScript errors in frontend: Often related to Pokemon card type definitions
+### Common Issues & Solutions
+- **CORS errors**: Check CORS_ORIGIN matches frontend URL
+- **No cards showing**: Verify USE_MOCK_DATA=false and database connection
+- **Types.map error**: Frontend handles both array and string formats
+- **500 errors**: Fixed by proper GROUP BY placement in SQL queries
+- **Railway deployment stuck**: Remove stuck deployment and redeploy
 
 ### Testing Features
 - Attack Calculator: Click any card → "Damage Calculator" button
