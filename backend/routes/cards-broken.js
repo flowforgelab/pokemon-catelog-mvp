@@ -33,6 +33,11 @@ router.get('/search', async (req, res) => {
       set,
       sets, // frontend sends as 'sets' array
       search, 
+      hp_min,
+      hp_max,
+      retreat_max,
+      competitive_rating,
+      has_ability,
       sortBy = 'name', // frontend sends as sortBy
       sortOrder = 'asc', // frontend sends as sortOrder
       page = 1, // frontend sends page, not offset
@@ -41,8 +46,8 @@ router.get('/search', async (req, res) => {
     
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
-    let baseQuery = `
-      SELECT c.*, 
+    let query = `
+      SELECT DISTINCT c.*, 
         COALESCE(
           json_agg(DISTINCT ct.type) FILTER (WHERE ct.type IS NOT NULL),
           '[]'::json
@@ -55,85 +60,177 @@ router.get('/search', async (req, res) => {
     const params = [];
     let paramIndex = 1;
 
-    // Add search condition
+    // Add filters
     if (search) {
-      baseQuery += ` AND c.name ILIKE $${paramIndex}`;
+      query += ` AND c.name ILIKE $${paramIndex}`;
       params.push(`%${search}%`);
       paramIndex++;
     }
 
-    // Add set filter
     if (set) {
-      baseQuery += ` AND c.set_id = $${paramIndex}`;
+      query += ` AND c.set_id = $${paramIndex}`;
       params.push(set);
       paramIndex++;
     }
 
-    // Add rarity filter
     if (rarity) {
-      baseQuery += ` AND c.rarity = $${paramIndex}`;
+      query += ` AND c.rarity = $${paramIndex}`;
       params.push(rarity);
       paramIndex++;
     }
 
-    // Group by to aggregate types
-    baseQuery += ` GROUP BY c.id`;
+    if (hp_min) {
+      query += ` AND c.hp >= $${paramIndex}`;
+      params.push(parseInt(hp_min));
+      paramIndex++;
+    }
 
-    // Wrap in subquery to filter by types after aggregation
-    let query = baseQuery;
+    if (hp_max) {
+      query += ` AND c.hp <= $${paramIndex}`;
+      params.push(parseInt(hp_max));
+      paramIndex++;
+    }
+
+    if (retreat_max !== undefined) {
+      query += ` AND c.retreat_cost <= $${paramIndex}`;
+      params.push(parseInt(retreat_max));
+      paramIndex++;
+    }
+
+    if (competitive_rating) {
+      query += ` AND c.competitive_rating = $${paramIndex}`;
+      params.push(competitive_rating);
+      paramIndex++;
+    }
+
+    if (has_ability === 'true') {
+      query += ` AND EXISTS (SELECT 1 FROM abilities WHERE card_id = c.id)`;
+    }
+
+    query += ` GROUP BY c.id`;
+
+    // Filter by type after grouping
     if (type) {
-      query = `
-        SELECT * FROM (${baseQuery}) AS cards_with_types
-        WHERE $${paramIndex} = ANY(ARRAY(SELECT json_array_elements_text(types)))
-      `;
+      query = `SELECT * FROM (${query}) AS filtered_cards WHERE $${paramIndex} = ANY(types)`;
       params.push(type);
       paramIndex++;
     }
 
-    // Add sorting
+    // Add sorting with enhanced options
     const sortOptions = {
-      'name': 'name',
-      'number': 'CAST(card_number AS INTEGER)',
-      'rarity': `CASE rarity 
-        WHEN 'Special Illustration Rare' THEN 1
-        WHEN 'Hyper Rare' THEN 2
-        WHEN 'Ultra Rare' THEN 3
-        WHEN 'Double Rare' THEN 4
-        WHEN 'Illustration Rare' THEN 5
-        WHEN 'Rare' THEN 6
-        WHEN 'Uncommon' THEN 7
-        WHEN 'Common' THEN 8
+      'name': 'c.name',
+      'card_number': 'c.card_number::int',
+      'rarity': `CASE c.rarity 
+        WHEN 'rare_secret' THEN 1
+        WHEN 'rare_ultra' THEN 2
+        WHEN 'rare_shiny' THEN 3
+        WHEN 'special_illustration_rare' THEN 4
+        WHEN 'rare_holo' THEN 5
+        WHEN 'rare' THEN 6
+        WHEN 'uncommon' THEN 7
+        WHEN 'common' THEN 8
         ELSE 9
       END`,
-      'set': 'set_id, CAST(card_number AS INTEGER)'
+      'competitive_rating': `CASE c.competitive_rating
+        WHEN 'competitive' THEN 1
+        WHEN 'playable' THEN 2
+        WHEN 'casual' THEN 3
+      END`,
+      'hp': 'c.hp',
+      'retreat_cost': 'c.retreat_cost',
+      'set': 'c.set_id, c.card_number::int',
+      'newest': 'c.created_at'
     };
     
     const sortField = sortOptions[sortBy] || sortOptions['name'];
     const sortDirection = sortOrder.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     
-    query += ` ORDER BY ${sortField} ${sortDirection}`;
-    
-    // Add pagination
-    const limitParam = paramIndex++;
-    const offsetParam = paramIndex++;
-    query += ` LIMIT $${limitParam} OFFSET $${offsetParam}`;
-    params.push(parseInt(limit), parseInt(offset));
-
-    // Execute query
-    const result = await db.query(query, params);
-    
-    // Get total count (without pagination)
-    let countQuery = baseQuery;
-    if (type) {
-      countQuery = `
-        SELECT COUNT(*) FROM (${baseQuery}) AS cards_with_types
-        WHERE $${params.length - 2} = ANY(ARRAY(SELECT json_array_elements_text(types)))
-      `;
+    // Special handling for rarity and competitive_rating (already ordered)
+    if (sortBy === 'rarity' || sortBy === 'competitive_rating') {
+      query += ` ORDER BY ${sortField} ${sortDirection}, c.name ASC`;
     } else {
-      countQuery = `SELECT COUNT(*) FROM (${baseQuery}) AS count_query`;
+      query += ` ORDER BY ${sortField} ${sortDirection}`;
+    }
+
+    // Need GROUP BY when using aggregate functions
+    query += ` GROUP BY c.id`;
+    
+    // Add sorting after GROUP BY
+    const sortOptions = {
+      'name': 'c.name',
+      'number': 'c.card_number::int',
+      'rarity': `CASE c.rarity 
+        WHEN 'rare_secret' THEN 1
+        WHEN 'rare_ultra' THEN 2
+        WHEN 'rare_shiny' THEN 3
+        WHEN 'special_illustration_rare' THEN 4
+        WHEN 'rare_holo' THEN 5
+        WHEN 'rare' THEN 6
+        WHEN 'uncommon' THEN 7
+        WHEN 'common' THEN 8
+        ELSE 9
+      END`,
+      'competitive_rating': `CASE c.competitive_rating
+        WHEN 'competitive' THEN 1
+        WHEN 'playable' THEN 2
+        WHEN 'casual' THEN 3
+      END`,
+      'hp': 'c.hp',
+      'retreat_cost': 'c.retreat_cost',
+      'set': 'c.set_id, c.card_number::int',
+      'newest': 'c.created_at'
+    };
+    
+    const sortField = sortOptions[sortBy] || sortOptions['name'];
+    const sortDirection = sortOrder.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    
+    // Special handling for rarity and competitive_rating (already ordered)
+    if (sortBy === 'rarity' || sortBy === 'competitive_rating') {
+      query += ` ORDER BY ${sortField} ${sortDirection}, c.name ASC`;
+    } else {
+      query += ` ORDER BY ${sortField} ${sortDirection}`;
     }
     
-    const countParams = params.slice(0, -2); // Remove limit and offset
+    // Add pagination
+    query += ` LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+    params.push(parseInt(limit), parseInt(offset));
+
+    const result = await db.query(query, params);
+    
+    // Get total count
+    let countQuery = `
+      SELECT COUNT(DISTINCT c.id) 
+      FROM cards c 
+      LEFT JOIN card_types ct ON c.id = ct.card_id
+      WHERE c.format_legal = true
+    `;
+    
+    const countParams = [];
+    let countParamIndex = 1;
+
+    if (search) {
+      countQuery += ` AND c.name ILIKE $${countParamIndex}`;
+      countParams.push(`%${search}%`);
+      countParamIndex++;
+    }
+
+    if (set) {
+      countQuery += ` AND c.set_id = $${countParamIndex}`;
+      countParams.push(set);
+      countParamIndex++;
+    }
+
+    if (rarity) {
+      countQuery += ` AND c.rarity = $${countParamIndex}`;
+      countParams.push(rarity);
+      countParamIndex++;
+    }
+
+    if (type) {
+      countQuery += ` AND EXISTS (SELECT 1 FROM card_types WHERE card_id = c.id AND type = $${countParamIndex})`;
+      countParams.push(type);
+    }
+
     const countResult = await db.query(countQuery, countParams);
     const total = parseInt(countResult.rows[0].count);
 
@@ -159,7 +256,7 @@ router.get('/search', async (req, res) => {
     res.json({
       cards: transformedCards,
       totalCount: total,
-      page: parseInt(page),
+      page: Math.floor(parseInt(offset) / parseInt(limit)) + 1,
       pageSize: parseInt(limit)
     });
   } catch (error) {
@@ -264,6 +361,47 @@ router.get('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching card:', error);
     res.status(500).json({ error: 'Failed to fetch card' });
+  }
+});
+
+// GET card types
+router.get('/meta/types', async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT DISTINCT unnest(enum_range(NULL::card_type)) as type
+      ORDER BY type
+    `);
+    res.json(result.rows.map(row => row.type));
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch card types' });
+  }
+});
+
+// GET rarities
+router.get('/meta/rarities', async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT DISTINCT unnest(enum_range(NULL::rarity_type)) as rarity
+      ORDER BY rarity
+    `);
+    res.json(result.rows.map(row => row.rarity));
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch rarities' });
+  }
+});
+
+// GET sets
+router.get('/meta/sets', async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT DISTINCT set_id, set_name 
+      FROM cards 
+      WHERE format_legal = true
+      ORDER BY set_name
+    `);
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch sets' });
   }
 });
 
