@@ -6,7 +6,10 @@ require('dotenv').config();
 
 const db = require('./config/database');
 // Use mock routes if database is not available
-const cardRoutes = process.env.USE_MOCK_DATA ? require('./routes/cards-mock') : require('./routes/cards');
+const useMockData = process.env.USE_MOCK_DATA === 'true';
+console.log('USE_MOCK_DATA:', process.env.USE_MOCK_DATA);
+console.log('Using mock data:', useMockData);
+const cardRoutes = useMockData ? require('./routes/cards-mock') : require('./routes/cards');
 const searchRoutes = require('./routes/search');
 
 const app = express();
@@ -51,8 +54,26 @@ app.use('/api/search', searchRoutes);
 app.use('/api/relationships', require('./routes/relationships'));
 
 // Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+app.get('/api/health', async (req, res) => {
+  const health = {
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    useMockData: useMockData,
+    environment: process.env.NODE_ENV
+  };
+  
+  if (!useMockData) {
+    try {
+      const result = await db.query('SELECT COUNT(*) FROM cards');
+      health.database = 'Connected';
+      health.cardCount = parseInt(result.rows[0].count);
+    } catch (error) {
+      health.database = 'Error';
+      health.error = error.message;
+    }
+  }
+  
+  res.json(health);
 });
 
 // Error handling middleware
