@@ -36,16 +36,16 @@
 - CORS setup completed
 - Live at production URLs
 
-## Step 6: Real Data Import 🚧
+## Step 6: Real Data Import ✅
 
 ### Tasks:
-- [ ] Set up PostgreSQL database on Railway
-- [ ] Run schema.sql to create tables
-- [ ] Configure database connection
-- [ ] Run import script for 250 cards
-- [ ] Switch USE_MOCK_DATA to false
+- [x] Set up PostgreSQL database on Railway
+- [x] Run schema.sql to create tables
+- [x] Configure database connection
+- [x] Run import script for 250 cards
+- [ ] Switch USE_MOCK_DATA to false (in progress)
 - [ ] Test with real data
-- [ ] Verify competitive ratings
+- [x] Verify competitive ratings
 
 ### Step-by-Step Instructions:
 
