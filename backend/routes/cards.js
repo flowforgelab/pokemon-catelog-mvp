@@ -28,7 +28,10 @@ router.get('/search', async (req, res) => {
 
     let query = `
       SELECT DISTINCT c.*, 
-        ARRAY_AGG(DISTINCT ct.type) FILTER (WHERE ct.type IS NOT NULL) as types
+        COALESCE(
+          json_agg(DISTINCT ct.type) FILTER (WHERE ct.type IS NOT NULL),
+          '[]'::json
+        ) as types
       FROM cards c
       LEFT JOIN card_types ct ON c.id = ct.card_id
       WHERE c.format_legal = true
@@ -244,7 +247,10 @@ router.get('/:id', async (req, res) => {
     // Get card details
     const cardQuery = `
       SELECT c.*, 
-        ARRAY_AGG(DISTINCT ct.type) FILTER (WHERE ct.type IS NOT NULL) as types
+        COALESCE(
+          json_agg(DISTINCT ct.type) FILTER (WHERE ct.type IS NOT NULL),
+          '[]'::json
+        ) as types
       FROM cards c
       LEFT JOIN card_types ct ON c.id = ct.card_id
       WHERE c.id = $1
