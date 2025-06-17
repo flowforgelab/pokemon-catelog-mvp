@@ -1,4 +1,4 @@
-# Pokemon Website MVP Progress
+# Pokemon Card Catalog Website - MVP Progress Tracker
 
 ## MVP Steps Completed ✅
 
@@ -95,7 +95,21 @@ Add these to your backend service:
 
 #### 6. Railway will auto-redeploy with real data!
 
+## Production URLs
+- **Frontend**: https://benevolent-mousse-8fe32b.netlify.app
+- **Backend API**: https://pokemon-catelog-mvp-production.up.railway.app/api
+- **GitHub**: https://github.com/flowforgelab/pokemon-catelog-mvp
+
+## Current Status
+- ✅ All 6 MVP steps completed
+- ✅ 250 Pokemon cards imported from TCG API
+- ✅ Full-stack application deployed and live
+- ✅ Search, filtering, and card details working
+- ✅ Attack damage calculator functional
+- ✅ Responsive design for mobile/desktop
+
 ## Future Enhancements
+- Import full card database (10,000+ cards)
 - User accounts and collections
 - Deck builder feature
 - Price tracking integration
