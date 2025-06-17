@@ -25,11 +25,17 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ onFiltersChange, isOpen =
   useEffect(() => {
     pokemonAPI.getFilterOptions()
       .then(({ types, rarities, sets }) => {
-        setTypes(types);
-        setRarities(rarities);
-        setSets(sets);
+        setTypes(types || []);
+        setRarities(rarities || []);
+        setSets(sets || []);
       })
-      .catch(console.error);
+      .catch(err => {
+        console.error('Failed to load filters:', err);
+        // Set empty arrays on error
+        setTypes([]);
+        setRarities([]);
+        setSets([]);
+      });
   }, []);
 
   // Remove the automatic filter change effect - only trigger on user interaction

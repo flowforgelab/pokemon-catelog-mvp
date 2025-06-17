@@ -2,6 +2,7 @@ import axios from 'axios';
 import { PokemonCard, SearchParams } from '../types/pokemon';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+console.log('API Base URL:', API_BASE_URL);
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -36,8 +37,10 @@ export const pokemonAPI = {
         rarities: string[];
         sets: { id: string; name: string }[];
       }>('/cards/filters');
+      console.log('Filter response:', response.data);
       return response.data;
     } catch (error) {
+      console.error('Filter API error:', error);
       // Fallback to mock data if endpoint doesn't exist yet
       return {
         types: ['Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Fighting', 'Darkness', 'Metal', 'Fairy', 'Dragon', 'Colorless'],
